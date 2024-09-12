@@ -23,32 +23,29 @@ class MyAppState extends ChangeNotifier {
 
   String taskDescription = "N/A";
 
-  List<dynamic> taskList = [
-    (
-      name: "placeholder",
-      desc: "N/A",
-      daysTo: -100,
-      Rank: 0,
-      Recurring: 0,
-      Completed: 0,
-    ),
-    (
-      name: "Bing",
-      desc: "This is a task",
-      daysTo: 10,
-      Rank: 1,
-      Recurring: 1,
-      Completed: 0,
-    ),
-    (
-      name: "Bang",
-      desc: "This is also task",
-      daysTo: 11,
-      Rank: 2,
-      Recurring: 1,
-      Completed: 0,
-    )
-  ];
+  List<Map<String, dynamic>> tasksList = [
+      {"name": "+",
+      "desc": "N/A",
+      "daysTo": -100,
+      "Rank": 0,
+      "Recurring": 0,
+      "Completed": 0},
+
+    {"name": "Bing",
+      "desc": "This is a task",
+      "daysTo": 5,
+      "Rank": 1,
+      "Recurring": 0,
+      "Completed": 0},
+
+    {"name": "Bang",
+      "desc": "This is also a task",
+      "daysTo": 6,
+      "Rank": 2,
+      "Recurring": 0,
+      "Completed": 0},
+    ];
+
 
   void newTask() {
     taskCount += 1;
@@ -79,7 +76,6 @@ class MyAppState extends ChangeNotifier {
   }
 
   updateTaskDescription() {
-    taskDescription = (task1['desc']);
     notifyListeners();
   }
 }
@@ -158,32 +154,27 @@ class TrackerApp extends StatelessWidget {
                 width: 400,
                 height: 250,
                 child: GridView.count(
-                    crossAxisCount: 4,
-                    mainAxisSpacing: 10.0,
-                    crossAxisSpacing: 10.0,
-                    children: List.generate(
-                      appState.taskCount,
-                      (i) => i == 0
-                          ? IconButton(
-                              onPressed: () {
-                                appState.newTask();
-                              },
-                              icon: const Icon(Icons.add),
-                              iconSize: 50,
-                            )
-                          : Container(
-                              height: 92.5,
-                              width: 92.5,
-                              color: const Color.fromARGB(255, 255, 241, 241),
-                              child: Center(
-                                  child: TextButton(
-                                      onPressed: () {
-                                        appState.updateTaskDescription();
-                                      },
-                                      child: Text(appState.task1['name']))),
-                            ),
-                    )))
-          ]),
+                  crossAxisCount: 4,
+                  mainAxisSpacing: 10.0,
+                  crossAxisSpacing: 10.0,
+                  children: appState.tasksList.map((taskInfo) {
+                    final String? name = taskInfo['name'];
+
+                    return Container(
+                      height: 92.5,
+                      width: 92.5,
+                      color: const Color.fromARGB(255, 255, 241, 241),
+                      child: Center(
+                        child: TextButton(
+                          onPressed: () {
+                            appState.updateTaskDescription();
+                            },
+                        child: Text(name!))),
+                    );
+                    }).toList(),
+                    ),
+        )]),
+
           const CompletedTasks(),
         ]));
   }
